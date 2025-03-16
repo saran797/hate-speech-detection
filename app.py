@@ -4,7 +4,7 @@ import numpy as np
 import joblib
 import re
 
-rf_model = joblib.load("./models/random_forest_model.pkl")
+
 svm_model = joblib.load("./models/svm_hate_speech_model.pkl")
 xgb_model = joblib.load("./models/xgb_hsd_model.pkl")
 lg_model = joblib.load("./models/logistic_regression_hsd_model.pkl")
@@ -14,17 +14,14 @@ st.title('Hate Speech Detection App')
 count_vectorizer = joblib.load("./processor/count_vectorizer.pkl")
 tfidf_transformer = joblib.load("./processor/tfidf_transformer.pkl")
 
-accuracies = {
-    "Random Forest": 98,  # Replace with your actual accuracy
+accuracies = {  
     "SVM": 98,
     "XGBoost": 91,
     "Logistic Regression": 98,
     "Naive Bayes":95
-
 }
 
 models = {
-    "Random Forest": rf_model,
     "SVM": svm_model,
     "Naive Bayes": nb_model,
     "XGBoost": xgb_model,
