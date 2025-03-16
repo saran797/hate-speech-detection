@@ -42,24 +42,25 @@ st.subheader("Model Accuracies",divider=True)
 df_acc = pd.DataFrame(list(accuracies.items()), columns=["Model", "Accuracy"])
 st.table(df_acc)
 
-selected_model= st.selectbox("Choose a model:", list(models.keys()),index=None,placeholder="Select a model",)
-st.write("Model Selected : ",selected_model)
-if selected_model is None:
-    st.warning("Please select a model.")
+selected_model = st.selectbox("Choose a model:", list(models.keys()), index=None, placeholder="Select a model")
+
+if selected_model:
+    model = models[selected_model]  # Only access if selected_model is valid
+    text = st.text_area("**Enter the text**")
+    st.write("Model Selected : ",selected_model)
+    if st.button("Classify"):
+        processed_text = pre_processing(text)  # Preprocess input
+
+        # Convert text to CountVectorizer format first
+        vectorized_text = count_vectorizer.transform([processed_text])
+
+        # Then apply TF-IDF transformation
+        tfidf_text = tfidf_transformer.transform(vectorized_text)
+
+        # Predict using the selected model
+        prediction = model.predict(tfidf_text)[0]
+
+        # Show result
+        st.write(f"**Prediction:** {'Hate Speech' if prediction == 1 else 'Not Hate Speech'}")
 else:
-    model = models[selected_model]
-text=st.text_area("**Enter the text**")
-if st.button("Classify"):
-    processed_text = pre_processing(text)  # Preprocess input
-
-    # Convert text to CountVectorizer format first
-    vectorized_text = count_vectorizer.transform([processed_text])
-
-    # Then apply TF-IDF transformation
-    tfidf_text = tfidf_transformer.transform(vectorized_text)
-
-    # Predict using the selected model
-    prediction = model.predict(tfidf_text)[0]
-
-    # Show result
-    st.write(f"**Prediction:** {'Hate Speech' if prediction == 1 else 'Not Hate Speech'}")
+    st.warning("Please select a model before proceeding.")
