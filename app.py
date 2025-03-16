@@ -44,8 +44,10 @@ st.table(df_acc)
 
 selected_model= st.selectbox("Choose a model:", list(models.keys()),index=None,placeholder="Select a model",)
 st.write("Model Selected : ",selected_model)
-
-model=models[selected_model]
+if selected_model is None:
+    st.warning("Please select a model.")
+else:
+    model = models[selected_model]
 text=st.text_area("**Enter the text**")
 if st.button("Classify"):
     processed_text = pre_processing(text)  # Preprocess input
